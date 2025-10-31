@@ -1,0 +1,68 @@
+# ============================================================================
+# DataSense - AI-Powered Data Analysis Platform
+# Requirements file with compatible package versions
+# ============================================================================
+# 
+# Python Version: 3.10+ required
+# (Uses modern type hints with | operator, e.g., tuple[bool, str | None])
+#
+# Installation:
+#   pip install -r requirements.txt
+#
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# Core Web Application Framework
+# ----------------------------------------------------------------------------
+streamlit>=1.28.0,<2.0.0
+
+# ----------------------------------------------------------------------------
+# Data Processing & Analysis
+# ----------------------------------------------------------------------------
+pandas>=2.0.0,<3.0.0
+openpyxl>=3.0.0,<4.0.0  # Required for Excel (.xlsx, .xls) file support
+
+# ----------------------------------------------------------------------------
+# Data Visualization
+# ----------------------------------------------------------------------------
+matplotlib>=3.8.0,<4.0.0
+seaborn>=0.13.0,<1.0.0
+
+# ----------------------------------------------------------------------------
+# LangChain Framework (AI/LLM Integration)
+# ----------------------------------------------------------------------------
+# Core LangChain packages
+langchain>=0.1.0,<1.0.0
+langchain-core>=0.1.0,<1.0.0  # Core abstractions and base classes
+langchain-experimental>=0.0.50,<1.0.0  # Experimental features (pandas dataframe agent)
+
+# ----------------------------------------------------------------------------
+# LangChain AI Provider Integrations
+# ----------------------------------------------------------------------------
+# OpenAI GPT models (GPT-4, GPT-3.5, etc.)
+langchain-openai>=0.0.5,<1.0.0
+
+# Google Gemini models
+langchain-google-genai>=0.0.6,<1.0.0
+
+# Anthropic Claude models
+langchain-anthropic>=0.1.0,<1.0.0
+
+# ----------------------------------------------------------------------------
+# Environment & Configuration
+# ----------------------------------------------------------------------------
+# python-dotenv>=1.0.0,<2.0.0  # For loading .env files (optional, for API key management)
+
+# ----------------------------------------------------------------------------
+# Note on Optional Dependencies:
+# ----------------------------------------------------------------------------
+# The following are automatically installed as dependencies of the above packages:
+# - numpy: Required by pandas, matplotlib, seaborn
+# - pillow: Required by matplotlib for image handling
+# - requests: Required by langchain providers for API calls
+# - pydantic: Required by langchain for data validation
+# - tenacity: Required by langchain for retry logic
+# - tqdm: Required by langchain for progress bars
+#
+# Python standard library modules used (no installation needed):
+# - os, io, json, traceback, re (regex), builtins
