@@ -1,14 +1,15 @@
-# 📊 DataSense - AI-Powered Data Analysis Platform
-
 <div align="center">
 
+# 📊 DataSense 
+
+### *Ask Data. Get Answers. No Code.*
+
 ![Python Version](https://img.shields.io/badge/python-3.10+-blue.svg)
-![Streamlit](https://img.shields.io/badge/streamlit-1.28+-red.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
+[![LangChain](https://img.shields.io/badge/LangChain-Core-green.svg)](https://www.langchain.com/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-App-red.svg)](https://streamlit.io/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Transform your data into insights with AI-powered analysis**
-
-[Features](#-features) • [Installation](#️-installation) • [Usage](#-usage) • [Video Demo](#-video-demo) • [Documentation](#-documentation)
+**DataSense** is an AI-powered natural-language data analysis assistant that turns plain questions into visual insights.
 
 </div>
 
@@ -145,71 +146,6 @@ The application will open automatically in your browser at `http://localhost:850
 
 ---
 
-## 🎬 Video Demo
-
-<div align="center">
-
-### 📺 Watch DataSense in Action
-
-[![DataSense Demo Video](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
-
-**[🎥 Click here to watch the full demo video](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)**
-
-*Replace `YOUR_VIDEO_ID` with your actual YouTube video ID. You can also use Vimeo, Loom, or any other video platform by updating the embed URL.*
-
-</div>
-
-### Video Highlights
-
-- ⚡ Quick setup and installation
-- 📊 EDA feature demonstration
-- 💬 Natural Language Query examples
-- 📈 Visualization generation walkthrough
-- 🔧 Dataframe manipulation showcase
-
----
-
-## 🎯 Usage Guide
-
-### Getting Started
-
-1. **Upload Your Data**
-   - Click "Browse files" in the sidebar
-   - Select a CSV or Excel (.xlsx, .xls) file
-   - Wait for file processing
-
-2. **Configure AI Settings**
-   - Select your preferred AI provider (Gemini, OpenAI, or Claude)
-   - Enter your API key in the input field
-   - Choose your model (defaults are optimized)
-
-3. **Explore Your Data**
-
-#### EDA Tab
-- Automatically displays comprehensive statistics
-- Navigate through numeric and categorical insights
-- Download complete EDA report as JSON
-
-#### NLQ Tab
-- Type your question in natural language
-- Click "Run NLQ" to get instant answers
-- Use "Generate NLQ Suggestions" for AI-recommended questions
-- Click any suggestion to auto-fill and execute
-
-#### Visualization Tab
-- Describe the chart you want in the text area
-- Click "Generate Chart" to create visualization
-- Use "Generate Visualization Suggestions" for recommendations
-- Click individual suggestion buttons to use them
-- View generated code in the expandable section
-
-#### Dataframe Manipulator Tab
-- Enter your transformation request
-- Click "Apply Manipulation" to execute
-- Preview changes and download updated CSV
-
----
-
 ## 📁 Project Structure
 
 ```
@@ -253,7 +189,7 @@ DataSense/
 
 You can use any compatible model from your chosen provider:
 - **OpenAI**: `gpt-4`, `gpt-4-turbo`, `gpt-3.5-turbo`, etc.
-- **Google**: `gemini-pro`, `gemini-1.5-pro`, etc.
+- **Google**: `gemini-2.5-pro`, `gemini-2.5-flash`, etc.
 - **Anthropic**: `claude-3-opus`, `claude-3-sonnet`, etc.
 
 ---
@@ -264,22 +200,9 @@ You can use any compatible model from your chosen provider:
 - **Excel** (`.xlsx`, `.xls`) - Microsoft Excel files
 
 **Limitations:**
-- Maximum recommended file size: 100MB
+- Maximum recommended file size: 200MB
 - Very large datasets may experience slower processing
 - Excel files with multiple sheets will load the first sheet
-
----
-
-## 🔒 Security Features
-
-DataSense is built with security as a priority:
-
-- ✅ **Safe Code Execution**: Restricted execution environment prevents dangerous operations
-- ✅ **Input Validation**: All user inputs are validated before processing
-- ✅ **Security Guardrails**: Blacklist of dangerous operations (file I/O, network access, etc.)
-- ✅ **No Data Storage**: Your data never leaves your machine (except API calls to LLM providers)
-- ✅ **API Key Security**: Keys are stored securely and never exposed in code
-- ✅ **Builtin Restrictions**: Dangerous Python builtins are blocked during code execution
 
 ---
 
@@ -302,47 +225,17 @@ DataSense is built with security as a priority:
 
 ---
 
-### Development Setup
-
-```bash
-# Install development dependencies (if any)
-pip install -r requirements-dev.txt  # Optional
-
-# Run tests (if available)
-pytest tests/
-
-# Check code style
-flake8 app.py utils/
-```
-
----
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## 📺 Demo Video
 
-- **Streamlit** - Amazing framework for building data apps
-- **LangChain** - Powerful LLM integration framework
-- **AI Providers** - OpenAI, Google, and Anthropic for incredible AI capabilities
-- **Open Source Community** - For the amazing libraries and tools
+Watch the full walkthrough and see DevNotes-AI in action:
 
----
-
-## 📧 Support & Contact
-
-- 🐛 **Report Issues**: [GitHub Issues](https://github.com/yourusername/DataSense/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/yourusername/DataSense/discussions)
-- 📧 **Email**: [your-email@example.com](mailto:your-email@example.com)
-
----
-
-## 🌟 Star History
-
-If you find this project useful, please consider giving it a ⭐ on GitHub!
+**[🎬 Watch Demo Video](https://drive.google.com/file/d/1dtJfPcS9UmK-i_jK_EQFJ_TgMv7N8Ic6/view?usp=drive_link)**
 
 ---
 
@@ -350,6 +243,6 @@ If you find this project useful, please consider giving it a ⭐ on GitHub!
 
 **Made with ❤️ by Saish**
 
-[⬆ Back to Top](#-datasense---ai-powered-data-analysis-platform)
+⭐ Star this repo if you find it useful!
 
 </div>
