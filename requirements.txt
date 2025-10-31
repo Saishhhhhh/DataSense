@@ -43,7 +43,7 @@ langchain-experimental>=0.0.50,<1.0.0  # Experimental features (pandas dataframe
 langchain-openai>=0.0.5,<1.0.0
 
 # Google Gemini models
-langchain-google-genai = 2.0.10
+langchain-google-genai>=2.0.10,<3.0.0
 
 # Anthropic Claude models
 langchain-anthropic>=0.1.0,<1.0.0
