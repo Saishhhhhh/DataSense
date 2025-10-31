@@ -283,17 +283,6 @@ DataSense is built with security as a priority:
 
 ---
 
-## 🎨 UI Features
-
-- **Modern Design**: Clean, professional interface with intuitive navigation
-- **Responsive Layout**: Works on desktop and tablet screens
-- **Real-time Feedback**: Loading indicators and progress updates
-- **Interactive Charts**: High-quality visualizations with proper labels and styling
-- **Collapsible Sections**: Organized information with expandable panels
-- **Color-coded Metrics**: Visual indicators for quick data assessment
-
----
-
 ## 📝 Example Use Cases
 
 ### Business Analytics
@@ -312,26 +301,6 @@ DataSense is built with security as a priority:
 - Generate publication-ready charts
 
 ---
-
-## 🛡️ Limitations & Considerations
-
-- **API Costs**: LLM API calls incur costs based on usage and provider
-- **Processing Time**: Large datasets (>100K rows) may take longer to analyze
-- **Code Generation**: Visualization code may occasionally need manual tweaks
-- **Rate Limits**: API providers enforce rate limits that may affect heavy usage
-- **Language Support**: Best results with English queries and data labels
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Here's how you can help:
-
-1. **Fork the repository**
-2. **Create a feature branch** (`git checkout -b feature/AmazingFeature`)
-3. **Commit your changes** (`git commit -m 'Add some AmazingFeature'`)
-4. **Push to the branch** (`git push origin feature/AmazingFeature`)
-5. **Open a Pull Request**
 
 ### Development Setup
 
@@ -379,7 +348,7 @@ If you find this project useful, please consider giving it a ⭐ on GitHub!
 
 <div align="center">
 
-**Made with ❤️ for data analysts and enthusiasts**
+**Made with ❤️ by Saish**
 
 [⬆ Back to Top](#-datasense---ai-powered-data-analysis-platform)
 

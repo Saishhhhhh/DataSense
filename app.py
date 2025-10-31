@@ -19,7 +19,7 @@ from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 from langchain_core.output_parsers import StrOutputParser
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 
-load_dotenv()
+# load_dotenv()
 # ----------------------------
 # Helpers: Suggestion normalization
 # ----------------------------
