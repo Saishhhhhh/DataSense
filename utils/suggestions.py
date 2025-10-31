@@ -76,55 +76,104 @@ def normalize_viz_suggestions(suggestions_obj) -> list:
     def split_numbered_suggestions(text: str) -> list:
         """Split text like '1. ... 2. ... 3. ...' into individual suggestions"""
         import re
-        # Pattern: Number followed by period and space
-        pattern = r'(\d+)\.\s+'
-        parts = re.split(pattern, text)
         suggestions = []
         
-        # After split: parts[0] is text before first match, then alternating: number, content, number, content...
-        # Skip parts[0] if it's not empty (text before first numbered item)
-        start_idx = 1 if parts[0].strip() == "" else 0
+        # Enhanced pattern to handle: "1. **Title:** Description. 2. **Title:** Description."
+        # Match: number, period, optional space, optional bold markers, title, colon, description
+        # Pattern captures: number, optional bold title, and description
+        pattern = r'(\d+)\.\s*(?:\*\*)?([^*:]+?)(?:\*\*)?:\s*(.+?)(?=\d+\.\s*(?:\*\*)?|$)'
+        matches = re.finditer(pattern, text, re.DOTALL)
         
-        # Process pairs: number at odd indices, content at even indices
-        i = start_idx
-        while i < len(parts):
-            if i + 1 < len(parts):
-                # parts[i] might be a number (skip), parts[i+1] is the content
-                desc = parts[i + 1].strip() if i + 1 < len(parts) else parts[i].strip() if i < len(parts) else ""
-                if desc:
-                    # Extract chart type and description
-                    # Pattern: "Chart Type: Description"
-                    if ':' in desc:
-                        potential_split = desc.split(':', 1)
-                        if len(potential_split) == 2:
-                            chart_type_candidate = potential_split[0].strip()
-                            desc_text = potential_split[1].strip()
-                            # Check if chart_type_candidate looks like a chart type
-                            if any(word in chart_type_candidate for word in ['Chart', 'Bar', 'Line', 'Area', 'Scatter', 'Pie', 'Heatmap']):
-                                chart_type = chart_type_candidate
-                            else:
-                                chart_type = "Visualization"
-                                desc_text = desc
-                        else:
-                            chart_type = "Visualization"
-                            desc_text = desc
-                    else:
-                        # Try to extract from first words
-                        words = desc.split()
-                        chart_type = "Visualization"
-                        desc_text = desc
-                        # Look for chart-related keywords in first few words
-                        for j, word in enumerate(words[:5]):
-                            if word in ['Chart', 'Bar', 'Line', 'Area', 'Scatter', 'Pie', 'Heatmap', 'Box', 'Histogram']:
-                                # Take words before and including this keyword
-                                chart_type = ' '.join(words[:j+1]) if j+1 < len(words) else 'Visualization'
-                                desc_text = ' '.join(words[j+1:]) if j+1 < len(words) else desc
-                                break
-                    
-                    suggestions.append({"type": chart_type, "description": desc_text})
-                i += 2  # Skip number and content, move to next number
-            else:
-                break
+        for match in matches:
+            num = match.group(1)
+            title_part = match.group(2).strip()
+            desc = match.group(3).strip()
+            
+            # Clean up title (remove bold markers, extra spaces)
+            title_part = re.sub(r'\*\*', '', title_part).strip()
+            
+            # Extract chart type from title or description
+            chart_type = "Visualization"
+            desc_text = desc
+            
+            # Check if title contains chart type keywords
+            title_lower = title_part.lower()
+            chart_keywords = {
+                'dashboard': 'Dashboard',
+                'bar chart': 'Bar Chart',
+                'boxplot': 'Boxplot',
+                'stacked bar': 'Stacked Bar Chart',
+                'line plot': 'Line Chart',
+                'line chart': 'Line Chart',
+                'scatter': 'Scatter Plot',
+                'heatmap': 'Heatmap',
+                'histogram': 'Histogram'
+            }
+            
+            for keyword, chart_name in chart_keywords.items():
+                if keyword in title_lower:
+                    chart_type = chart_name
+                    break
+            
+            # Also check description for chart types
+            if chart_type == "Visualization":
+                desc_lower = desc.lower()
+                # Look for patterns like "bar chart", "line plot", etc.
+                for keyword, chart_name in chart_keywords.items():
+                    if keyword in desc_lower:
+                        chart_type = chart_name
+                        break
+                
+                # Check for standalone chart words
+                words = desc.split()
+                for j, word in enumerate(words[:8]):  # Check first 8 words
+                    word_lower = word.lower().rstrip('s')  # Remove plural
+                    if word_lower in ['chart', 'plot', 'graph'] and j > 0:
+                        # Get preceding words for context
+                        context = ' '.join(words[max(0, j-2):j+1])
+                        if 'bar' in context.lower():
+                            chart_type = 'Bar Chart'
+                        elif 'line' in context.lower():
+                            chart_type = 'Line Chart'
+                        elif 'scatter' in context.lower():
+                            chart_type = 'Scatter Plot'
+                        break
+            
+            # Use title as part of description if meaningful
+            if title_part and len(title_part) > 3:
+                if title_part not in desc_text:
+                    desc_text = f"{title_part}: {desc_text}"
+            
+            suggestions.append({
+                "type": chart_type,
+                "description": desc_text.rstrip('. '),  # Remove trailing periods/spaces
+                "original_title": title_part
+            })
+        
+        # Fallback: if no matches found, try simpler pattern
+        if not suggestions:
+            # Try pattern without bold markers
+            simple_pattern = r'(\d+)\.\s+([^:]+?):\s*(.+?)(?=\d+\.|$)'
+            simple_matches = re.finditer(simple_pattern, text, re.DOTALL)
+            for match in simple_matches:
+                title_part = match.group(2).strip()
+                desc = match.group(3).strip()
+                chart_type = "Visualization"
+                desc_text = desc
+                
+                # Extract chart type
+                if any(word in title_part.lower() for word in ['chart', 'plot', 'graph', 'dashboard']):
+                    words = title_part.split()
+                    for word in words:
+                        if word.lower() in ['bar', 'line', 'scatter', 'box', 'pie']:
+                            chart_type = word.capitalize() + ' Chart'
+                            break
+                
+                suggestions.append({
+                    "type": chart_type,
+                    "description": desc_text.rstrip('. '),
+                    "original_title": title_part
+                })
         
         return suggestions if suggestions else [{"type": "Visualization", "description": text}]
     
@@ -158,6 +207,7 @@ def normalize_viz_suggestions(suggestions_obj) -> list:
                         normalized.append({
                             "type": split_item.get("type", it.get("type", "Visualization")),
                             "description": split_item.get("description", ""),
+                            "original_title": split_item.get("original_title", ""),
                             "columns": it.get("columns") or it.get("cols") or [],
                             "prompt": prompt or "",
                         })
@@ -180,6 +230,7 @@ def normalize_viz_suggestions(suggestions_obj) -> list:
                             normalized.append({
                                 "type": split_item.get("type", "Visualization"),
                                 "description": split_item.get("description", ""),
+                                "original_title": split_item.get("original_title", ""),
                                 "columns": [],
                                 "prompt": split_item.get("description", ""),
                             })
@@ -200,6 +251,7 @@ def normalize_viz_suggestions(suggestions_obj) -> list:
                     normalized.append({
                         "type": split_item.get("type", "Visualization"),
                         "description": split_item.get("description", ""),
+                        "original_title": split_item.get("original_title", ""),
                         "columns": [],
                         "prompt": split_item.get("description", ""),
                     })

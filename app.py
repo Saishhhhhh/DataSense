@@ -667,7 +667,7 @@ with tab_eda:
         data=eda_json, 
         file_name="eda_results.json", 
         mime="application/json",
-        use_container_width=True
+        width='stretch'
     )
 
 with tab_nlq:
@@ -708,7 +708,7 @@ with tab_viz:
     viz_req = st.text_area("Describe the chart you want to create", height=100, key="viz_request")
     col_btn1, col_btn2 = st.columns([1, 10])
     with col_btn1:
-        run_viz = st.button("Generate Chart", use_container_width=True)
+        run_viz = st.button("Generate Chart", width='stretch')
     
     # Chart generation right below input - immediate display
     if run_viz and viz_req and viz_req.strip():
@@ -726,7 +726,7 @@ with tab_viz:
     st.markdown("---")
     
     # Generate Suggestions button - outside expander
-    if st.button("💡 Generate Visualization Suggestions", use_container_width=True):
+    if st.button("💡 Generate Visualization Suggestions", width='stretch'):
         with st.spinner("Generating suggestions..."):
             try:
                 st.session_state["_viz_suggestions"] = get_insight_suggestions(chat_model, df)
@@ -744,12 +744,15 @@ with tab_viz:
                     # Extract chart type and clean description
                     chart_type = item.get("type", "Visualization")
                     desc = item.get("description") or ""
+                    original_title = item.get("original_title", "")
                     
-                    # Clean description - remove chart type prefix if present
+                    # Clean description - handle formatting
                     desc_clean = str(desc).strip()
                     
-                    # Remove chart type from beginning of description (case-insensitive)
-                    # Handle patterns like "Stacked Area Chart: Description" or "Stacked Area Chart Description"
+                    # Remove bold markers (**text**) but preserve the text
+                    desc_clean = desc_clean.replace("**", "")
+                    
+                    # Remove chart type from beginning if present
                     type_variants = [
                         chart_type,
                         chart_type.replace(" Chart", ""),
@@ -759,26 +762,42 @@ with tab_viz:
                     ]
                     
                     for variant in type_variants:
-                        # Pattern: "Type: Description"
                         if desc_clean.lower().startswith(variant.lower() + ":"):
                             desc_clean = desc_clean[len(variant) + 1:].strip()
                             break
-                        # Pattern: "Type Description" (when type ends with chart word)
                         elif desc_clean.lower().startswith(variant.lower() + " "):
                             desc_clean = desc_clean[len(variant):].strip()
                             break
                     
+                    # If we have an original_title, use it for better display
+                    display_title = original_title if original_title and len(original_title) > 3 else chart_type
+                    # Clean title from bold markers
+                    display_title = display_title.replace("**", "").strip()
+                    
                     # Display in a cleaner format with individual button for each
                     col_title, col_btn = st.columns([4, 1])
                     with col_title:
-                        st.markdown(f"**V{i}: {chart_type}**")
+                        # Format: V1: Chart Type - Title (if title is meaningful)
+                        if original_title and len(original_title) > 3 and original_title != chart_type:
+                            title_clean = original_title.replace("**", "").strip()
+                            st.markdown(f"**V{i}: {chart_type}** — *{title_clean}*")
+                        else:
+                            st.markdown(f"**V{i}: {chart_type}**")
+                        
                         if desc_clean:
-                            st.markdown(f"<div style='margin: 0.25em 0 0.5em 1em; color: #555; line-height: 1.5; font-size: 0.9em;'>{desc_clean}</div>", unsafe_allow_html=True)
+                            # Clean up description text - remove extra formatting
+                            desc_final = desc_clean.replace("**", "").strip()
+                            # Capitalize first letter if needed
+                            if desc_final and desc_final[0].islower():
+                                desc_final = desc_final[0].upper() + desc_final[1:]
+                            st.markdown(f"<p style='margin: 0.5em 0 0.75em 1.5em; color: #444; line-height: 1.6; font-size: 0.92em;'>{desc_final}</p>", unsafe_allow_html=True)
+                        
                         cols = item.get("columns") or []
                         if cols:
                             st.caption(f"📊 Columns: {', '.join(map(str, cols))}")
+                    
                     with col_btn:
-                        if st.button("Use", key=f"use_viz_{i}", use_container_width=True):
+                        if st.button("Use", key=f"use_viz_{i}", width='stretch'):
                             chosen = item.get("prompt") or item.get("description") or ""
                             st.session_state["_viz_prefill"] = chosen
                             st.rerun()
